@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PopulateTwosiesDelegate {
-    func sendImageData(text: String)
+    func sendImageData(text: String, image: UIImage)
 }
 
 class CollectionCell: UICollectionViewCell {
@@ -25,9 +25,10 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
     var fetching: Bool = false
     var images: [UIImage] = []
     let group = DispatchGroup()
-    var cellData: String?
+    var cellDataLabel: String?
+    var cellDataImage: UIImage?
     
-    let urlString = "https://picsum.photos/146/375/?random"
+    let urlString = "https://picsum.photos/300/200/?random"
 
    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -69,7 +70,7 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
         if segue.identifier == "populateTwosies" {
             let twosiesVC = segue.destination as! TwosiesViewController
             
-            twosiesVC.sendImageData(text: self.cellData!)
+            twosiesVC.sendImageData(text: self.cellDataLabel!, image: self.cellDataImage!)
         }
     }
 
@@ -80,7 +81,8 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
         if let indexPath = collectionView?.indexPathForItem(at: touchPoint) {
             let cell = collectionView?.cellForItem(at: indexPath) as! CollectionCell
             
-            self.cellData = cell.cellLabel?.text    
+            self.cellDataLabel = cell.cellLabel?.text
+            self.cellDataImage = cell.cellImage?.image
 
             self.performSegue(withIdentifier: "populateTwosies", sender: sender)
         }

@@ -12,11 +12,14 @@ import UIKit
 class TwosiesViewController: UIViewController, PopulateTwosiesDelegate {
     var delegate: UIViewController? = nil
     var textData: String?
+    var imageData: UIImage?
 
     @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var dataImage: UIImageView!
     
-    func sendImageData(text: String) {
+    func sendImageData(text: String, image: UIImage) {
         self.textData = text
+        self.imageData = image
     }
 
     override func viewDidLoad() {
@@ -25,6 +28,7 @@ class TwosiesViewController: UIViewController, PopulateTwosiesDelegate {
         self.delegate? = onesiesVC
         
         self.dataLabel?.text = self.textData!
+        self.dataImage?.image = self.imageData!
     }
 
     override func didReceiveMemoryWarning() {

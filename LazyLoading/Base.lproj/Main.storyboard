@@ -127,13 +127,24 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kBU-1v-C90">
+                                        <rect key="frame" x="16" y="210" width="342" height="182"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="182" id="OYu-2H-Ff4"/>
+                                            <constraint firstAttribute="width" constant="342" id="b68-JD-YpE"/>
+                                        </constraints>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.8283614882245165" green="1" blue="0.79778244043205704" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="kBU-1v-C90" secondAttribute="bottom" constant="211" id="OgZ-Yv-KvS"/>
+                                    <constraint firstItem="kBU-1v-C90" firstAttribute="top" secondItem="lZd-7C-b5z" secondAttribute="top" constant="210" id="SWv-0o-Ee0"/>
                                     <constraint firstItem="KjM-dQ-2by" firstAttribute="top" secondItem="lZd-7C-b5z" secondAttribute="top" constant="91" id="WpB-od-VaK"/>
+                                    <constraint firstAttribute="trailing" secondItem="kBU-1v-C90" secondAttribute="trailing" constant="17" id="ZHI-Zb-2yj"/>
                                     <constraint firstAttribute="trailing" secondItem="KjM-dQ-2by" secondAttribute="trailing" constant="54" id="flH-BL-DxE"/>
                                     <constraint firstItem="KjM-dQ-2by" firstAttribute="leading" secondItem="lZd-7C-b5z" secondAttribute="leading" constant="53" id="hGz-cN-Mt5"/>
                                     <constraint firstAttribute="bottom" secondItem="KjM-dQ-2by" secondAttribute="bottom" constant="491" id="w7n-F4-kie"/>
+                                    <constraint firstItem="kBU-1v-C90" firstAttribute="leading" secondItem="lZd-7C-b5z" secondAttribute="leading" constant="16" id="xiH-EF-LNn"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -150,6 +161,7 @@
                         <barButtonItem key="backBarButtonItem" title=" " id="zzh-nK-K3i"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="dataImage" destination="kBU-1v-C90" id="uq3-0t-fBu"/>
                         <outlet property="dataLabel" destination="KjM-dQ-2by" id="bTP-hR-SBG"/>
                     </connections>
                 </viewController>
