@@ -18,50 +18,60 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var dataCount: Int = 10
     var fetching: Bool = false
+    var images: [UIImage] = []
+    let group = DispatchGroup()
+    
+    let urlString = "https://picsum.photos/146/375/?random"
+
    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == dataCount - 1 && !fetching {  //numberofitem count
-            dataCount = dataCount + 1
-            collectionView.reloadData()
-            fetching = true
-            debounceRowFetch(seconds: 3)
+        print("fired end")
+        print(images.count)
+        print(!fetching)
+        if indexPath.row == images.count - 1 {
+
+            let url = URL(string: urlString)
+            
+            fetchImageWithUrl(url: url!)
+            
         }
     }
-    
-    func debounceRowFetch(seconds: Double) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
-            self.fetching = false
-        }
-    }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataCount
+        return images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let urlString = "https://picsum.photos/200/300/?random"
-        let url = URL(string: urlString)
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
-        
-        fetchImageWithUrl(cellImage: cell.cellImage, url: url!)
-        
+        cell.cellImage.image = images[indexPath.row]
         return cell
     }
     
-    func fetchImageWithUrl(cellImage: UIImageView?, url: URL) {
-        DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url)
+
+    func fetchImageWithUrl(url: URL) {
+        URLSession.shared.dataTask(with: url) { (data, res, err) in
+//            let data = try? Data(contentsOf: url)
+            self.images.append(UIImage(data: data!)!)
+            
             DispatchQueue.main.async {
-                cellImage?.image = UIImage(data: data!)
+                self.collectionView.reloadData()
             }
-        }
+            
+        }.resume()
     }
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("onesies")
+        
+        let url = URL(string: urlString)
+        
+        group.enter()
+        for _ in 1...10 {
+            fetchImageWithUrl(url: url!)
+        }
+        group.leave()
+        group.wait()
+            print(images)
         // Do any additional setup after loading the view.
     }
 
