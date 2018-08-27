@@ -16,8 +16,26 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    var dataCount: Int = 10
+    var fetching: Bool = false
+   
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == dataCount - 1 && !fetching {  //numberofitem count
+            dataCount = dataCount + 1
+            collectionView.reloadData()
+            fetching = true
+            debounceRowFetch(seconds: 3)
+        }
+    }
+    
+    func debounceRowFetch(seconds: Double) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+            self.fetching = false
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return dataCount
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
