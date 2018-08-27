@@ -25,9 +25,6 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
 
    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("fired end")
-        print(images.count)
-        print(!fetching)
         if indexPath.row == images.count - 1 {
 
             let url = URL(string: urlString)
@@ -38,19 +35,25 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
         return images.count
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
+        
         cell.cellImage.image = images[indexPath.row]
+        
         return cell
     }
     
 
     func fetchImageWithUrl(url: URL) {
+        
         URLSession.shared.dataTask(with: url) { (data, res, err) in
-//            let data = try? Data(contentsOf: url)
+            
             self.images.append(UIImage(data: data!)!)
             
             DispatchQueue.main.async {
@@ -58,21 +61,27 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             
         }.resume()
+        
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    func fetchInitialImages() {
         let url = URL(string: urlString)
         
         group.enter()
-        for _ in 1...10 {
-            fetchImageWithUrl(url: url!)
-        }
+            for _ in 1...10 {
+                self.fetchImageWithUrl(url: url!)
+            }
         group.leave()
+        
         group.wait()
-            print(images)
-        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+
+        fetchInitialImages()
+        
     }
 
     override func didReceiveMemoryWarning() {
