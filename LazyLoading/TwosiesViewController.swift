@@ -8,13 +8,23 @@
 
 import UIKit
 
-class TwosiesViewController: UIViewController {
+
+class TwosiesViewController: UIViewController, PopulateTwosiesDelegate {
+    var delegate: UIViewController? = nil
+    var textData: String?
+
+    @IBOutlet weak var dataLabel: UILabel!
+    
+    func sendImageData(text: String) {
+        self.textData = text
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("twosies")
-
-        // Do any additional setup after loading the view.
+        let onesiesVC = OnesiesViewController()
+        self.delegate? = onesiesVC
+        
+        self.dataLabel?.text = self.textData!
     }
 
     override func didReceiveMemoryWarning() {

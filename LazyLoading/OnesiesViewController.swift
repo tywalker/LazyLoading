@@ -8,18 +8,24 @@
 
 import UIKit
 
+protocol PopulateTwosiesDelegate {
+    func sendImageData(text: String)
+}
+
 class CollectionCell: UICollectionViewCell {
+    @IBOutlet weak var cellLabel: UILabel!
     @IBOutlet weak var cellImage: UIImageView!
 }
 
 class OnesiesViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     @IBOutlet weak var collectionView: UICollectionView!
     
     var dataCount: Int = 10
     var fetching: Bool = false
     var images: [UIImage] = []
     let group = DispatchGroup()
+    var cellData: String?
     
     let urlString = "https://picsum.photos/146/375/?random"
 
@@ -39,16 +45,47 @@ class OnesiesViewController: UIViewController, UICollectionViewDelegate, UIColle
         return images.count
         
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+        collectionView.allowsSelection = true
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionCell", for: indexPath) as! CollectionCell
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.tapFunction))
+        cell.isUserInteractionEnabled = true
+        cell.addGestureRecognizer(tap)
+       
+        cell.cellLabel.text = "Number \(indexPath.row) image"
+        cell.cellLabel.isUserInteractionEnabled = true
+        cell.cellLabel.addGestureRecognizer(tap)
+        
         cell.cellImage.image = images[indexPath.row]
+        cell.cellImage.isUserInteractionEnabled = true
+        cell.cellImage.addGestureRecognizer(tap)
         
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "populateTwosies" {
+            let twosiesVC = segue.destination as! TwosiesViewController
+            
+            twosiesVC.sendImageData(text: self.cellData!)
+        }
+    }
+
+    @objc
+    func tapFunction(sender: UITapGestureRecognizer) {
+        let touchPoint = sender.location(in: collectionView)
+        
+        if let indexPath = collectionView?.indexPathForItem(at: touchPoint) {
+            let cell = collectionView?.cellForItem(at: indexPath) as! CollectionCell
+            
+            self.cellData = cell.cellLabel?.text    
+
+            self.performSegue(withIdentifier: "populateTwosies", sender: sender)
+        }
+
+    }
 
     func fetchImageWithUrl(url: URL) {
         
